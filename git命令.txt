@@ -1,0 +1,4 @@
+git add .
+git commit -m "first commit"   "写备注"
+git remote add origin https://github.com/2572418665/pharmacy.git
+git push -u origin master
