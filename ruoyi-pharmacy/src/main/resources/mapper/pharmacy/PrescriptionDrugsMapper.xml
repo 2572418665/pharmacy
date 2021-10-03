@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.PrescriptionDrugsMapper">
+    
+    <resultMap type="PrescriptionDrugs" id="PrescriptionDrugsResult">
+        <result property="id"    column="id"    />
+        <result property="prescriptionId"    column="prescription_id"    />
+        <result property="drugName"    column="drug_name"    />
+        <result property="drugSpec"    column="drug_spec"    />
+        <result property="drugForm"    column="drug_form"    />
+        <result property="drugDose"    column="drug_dose"    />
+        <result property="drugUsage"    column="drug_usage"    />
+        <result property="drugInfo"    column="drug_info"    />
+    </resultMap>
+
+    <sql id="selectPrescriptionDrugsVo">
+        select id, prescription_id, drug_name, drug_spec, drug_form, drug_dose, drug_usage, drug_info from prescription_drugs
+    </sql>
+
+    <select id="selectPrescriptionDrugsList" parameterType="PrescriptionDrugs" resultMap="PrescriptionDrugsResult">
+        <include refid="selectPrescriptionDrugsVo"/>
+        <where>  
+            <if test="prescriptionId != null "> and prescription_id = #{prescriptionId}</if>
+            <if test="drugName != null  and drugName != ''"> and drug_name like concat('%', #{drugName}, '%')</if>
+            <if test="drugSpec != null  and drugSpec != ''"> and drug_spec = #{drugSpec}</if>
+            <if test="drugForm != null  and drugForm != ''"> and drug_form = #{drugForm}</if>
+            <if test="drugDose != null  and drugDose != ''"> and drug_dose = #{drugDose}</if>
+            <if test="drugUsage != null  and drugUsage != ''"> and drug_usage = #{drugUsage}</if>
+            <if test="drugInfo != null  and drugInfo != ''"> and drug_info = #{drugInfo}</if>
+        </where>
+    </select>
+    
+    <select id="selectPrescriptionDrugsById" parameterType="Long" resultMap="PrescriptionDrugsResult">
+        <include refid="selectPrescriptionDrugsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPrescriptionDrugs" parameterType="PrescriptionDrugs" useGeneratedKeys="true" keyProperty="id">
+        insert into prescription_drugs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prescriptionId != null">prescription_id,</if>
+            <if test="drugName != null">drug_name,</if>
+            <if test="drugSpec != null">drug_spec,</if>
+            <if test="drugForm != null">drug_form,</if>
+            <if test="drugDose != null">drug_dose,</if>
+            <if test="drugUsage != null">drug_usage,</if>
+            <if test="drugInfo != null">drug_info,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prescriptionId != null">#{prescriptionId},</if>
+            <if test="drugName != null">#{drugName},</if>
+            <if test="drugSpec != null">#{drugSpec},</if>
+            <if test="drugForm != null">#{drugForm},</if>
+            <if test="drugDose != null">#{drugDose},</if>
+            <if test="drugUsage != null">#{drugUsage},</if>
+            <if test="drugInfo != null">#{drugInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePrescriptionDrugs" parameterType="PrescriptionDrugs">
+        update prescription_drugs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prescriptionId != null">prescription_id = #{prescriptionId},</if>
+            <if test="drugName != null">drug_name = #{drugName},</if>
+            <if test="drugSpec != null">drug_spec = #{drugSpec},</if>
+            <if test="drugForm != null">drug_form = #{drugForm},</if>
+            <if test="drugDose != null">drug_dose = #{drugDose},</if>
+            <if test="drugUsage != null">drug_usage = #{drugUsage},</if>
+            <if test="drugInfo != null">drug_info = #{drugInfo},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePrescriptionDrugsById" parameterType="Long">
+        delete from prescription_drugs where id = #{id}
+    </delete>
+
+    <delete id="deletePrescriptionDrugsByIds" parameterType="String">
+        delete from prescription_drugs where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

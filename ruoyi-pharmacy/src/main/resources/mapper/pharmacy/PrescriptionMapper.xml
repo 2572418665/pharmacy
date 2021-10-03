@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.PrescriptionMapper">
+    
+    <resultMap type="Prescription" id="PrescriptionResult">
+        <result property="id"    column="id"    />
+        <result property="hospitalName"    column="hospital_name"    />
+        <result property="prescriptionDate"    column="prescription_date"    />
+        <result property="prescriptionOutdate"    column="prescription_outdate"    />
+        <result property="drName"    column="dr_name"    />
+        <result property="drDept"    column="dr_dept"    />
+        <result property="drSign"    column="dr_sign"    />
+        <result property="patientName"    column="patient_name"    />
+        <result property="patientAge"    column="patient_age"    />
+        <result property="patientSex"    column="patient_sex"    />
+        <result property="patientWeight"    column="patient_weight"    />
+        <result property="patientAllergy"    column="patient_allergy"    />
+        <result property="clinicalDiag"    column="clinical_diag"    />
+        <result property="prescriptionReview"    column="prescription_review"    />
+    </resultMap>
+
+    <sql id="selectPrescriptionVo">
+        select id, hospital_name, prescription_date, prescription_outdate, dr_name, dr_dept, dr_sign, patient_name, patient_age, patient_sex, patient_weight, patient_allergy, clinical_diag, prescription_review from prescription
+    </sql>
+
+    <select id="selectPrescriptionList" parameterType="Prescription" resultMap="PrescriptionResult">
+        <include refid="selectPrescriptionVo"/>
+        <where>  
+            <if test="hospitalName != null  and hospitalName != ''"> and hospital_name like concat('%', #{hospitalName}, '%')</if>
+            <if test="prescriptionDate != null "> and prescription_date = #{prescriptionDate}</if>
+            <if test="prescriptionOutdate != null "> and prescription_outdate = #{prescriptionOutdate}</if>
+            <if test="drName != null  and drName != ''"> and dr_name like concat('%', #{drName}, '%')</if>
+            <if test="drDept != null  and drDept != ''"> and dr_dept = #{drDept}</if>
+            <if test="drSign != null  and drSign != ''"> and dr_sign = #{drSign}</if>
+            <if test="patientName != null  and patientName != ''"> and patient_name like concat('%', #{patientName}, '%')</if>
+            <if test="patientAge != null "> and patient_age = #{patientAge}</if>
+            <if test="patientSex != null  and patientSex != ''"> and patient_sex = #{patientSex}</if>
+            <if test="patientWeight != null "> and patient_weight = #{patientWeight}</if>
+            <if test="patientAllergy != null  and patientAllergy != ''"> and patient_allergy = #{patientAllergy}</if>
+            <if test="clinicalDiag != null  and clinicalDiag != ''"> and clinical_diag = #{clinicalDiag}</if>
+            <if test="prescriptionReview != null  and prescriptionReview != ''"> and prescription_review = #{prescriptionReview}</if>
+        </where>
+    </select>
+    
+    <select id="selectPrescriptionById" parameterType="Long" resultMap="PrescriptionResult">
+        <include refid="selectPrescriptionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPrescription" parameterType="Prescription" useGeneratedKeys="true" keyProperty="id">
+        insert into prescription
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="hospitalName != null">hospital_name,</if>
+            <if test="prescriptionDate != null">prescription_date,</if>
+            <if test="prescriptionOutdate != null">prescription_outdate,</if>
+            <if test="drName != null">dr_name,</if>
+            <if test="drDept != null">dr_dept,</if>
+            <if test="drSign != null">dr_sign,</if>
+            <if test="patientName != null">patient_name,</if>
+            <if test="patientAge != null">patient_age,</if>
+            <if test="patientSex != null">patient_sex,</if>
+            <if test="patientWeight != null">patient_weight,</if>
+            <if test="patientAllergy != null">patient_allergy,</if>
+            <if test="clinicalDiag != null">clinical_diag,</if>
+            <if test="prescriptionReview != null">prescription_review,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="hospitalName != null">#{hospitalName},</if>
+            <if test="prescriptionDate != null">#{prescriptionDate},</if>
+            <if test="prescriptionOutdate != null">#{prescriptionOutdate},</if>
+            <if test="drName != null">#{drName},</if>
+            <if test="drDept != null">#{drDept},</if>
+            <if test="drSign != null">#{drSign},</if>
+            <if test="patientName != null">#{patientName},</if>
+            <if test="patientAge != null">#{patientAge},</if>
+            <if test="patientSex != null">#{patientSex},</if>
+            <if test="patientWeight != null">#{patientWeight},</if>
+            <if test="patientAllergy != null">#{patientAllergy},</if>
+            <if test="clinicalDiag != null">#{clinicalDiag},</if>
+            <if test="prescriptionReview != null">#{prescriptionReview},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePrescription" parameterType="Prescription">
+        update prescription
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="hospitalName != null">hospital_name = #{hospitalName},</if>
+            <if test="prescriptionDate != null">prescription_date = #{prescriptionDate},</if>
+            <if test="prescriptionOutdate != null">prescription_outdate = #{prescriptionOutdate},</if>
+            <if test="drName != null">dr_name = #{drName},</if>
+            <if test="drDept != null">dr_dept = #{drDept},</if>
+            <if test="drSign != null">dr_sign = #{drSign},</if>
+            <if test="patientName != null">patient_name = #{patientName},</if>
+            <if test="patientAge != null">patient_age = #{patientAge},</if>
+            <if test="patientSex != null">patient_sex = #{patientSex},</if>
+            <if test="patientWeight != null">patient_weight = #{patientWeight},</if>
+            <if test="patientAllergy != null">patient_allergy = #{patientAllergy},</if>
+            <if test="clinicalDiag != null">clinical_diag = #{clinicalDiag},</if>
+            <if test="prescriptionReview != null">prescription_review = #{prescriptionReview},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePrescriptionById" parameterType="Long">
+        delete from prescription where id = #{id}
+    </delete>
+
+    <delete id="deletePrescriptionByIds" parameterType="String">
+        delete from prescription where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

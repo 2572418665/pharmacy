@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.NewsRecordMapper">
+    
+    <resultMap type="NewsRecord" id="NewsRecordResult">
+        <result property="id"    column="id"    />
+        <result property="newsId"    column="news_id"    />
+        <result property="pushId"    column="push_id"    />
+        <result property="pushTime"    column="push_time"    />
+    </resultMap>
+
+    <sql id="selectNewsRecordVo">
+        select id, news_id, push_id, push_time from news_record
+    </sql>
+
+    <select id="selectNewsRecordList" parameterType="NewsRecord" resultMap="NewsRecordResult">
+        <include refid="selectNewsRecordVo"/>
+        <where>  
+            <if test="newsId != null "> and news_id = #{newsId}</if>
+            <if test="pushId != null  and pushId != ''"> and push_id = #{pushId}</if>
+            <if test="pushTime != null "> and push_time = #{pushTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectNewsRecordById" parameterType="Long" resultMap="NewsRecordResult">
+        <include refid="selectNewsRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNewsRecord" parameterType="NewsRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into news_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="newsId != null">news_id,</if>
+            <if test="pushId != null">push_id,</if>
+            <if test="pushTime != null">push_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="newsId != null">#{newsId},</if>
+            <if test="pushId != null">#{pushId},</if>
+            <if test="pushTime != null">#{pushTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNewsRecord" parameterType="NewsRecord">
+        update news_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="newsId != null">news_id = #{newsId},</if>
+            <if test="pushId != null">push_id = #{pushId},</if>
+            <if test="pushTime != null">push_time = #{pushTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNewsRecordById" parameterType="Long">
+        delete from news_record where id = #{id}
+    </delete>
+
+    <delete id="deleteNewsRecordByIds" parameterType="String">
+        delete from news_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

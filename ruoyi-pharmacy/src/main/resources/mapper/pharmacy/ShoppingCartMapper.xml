@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.ShoppingCartMapper">
+    
+    <resultMap type="ShoppingCart" id="ShoppingCartResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="num"    column="num"    />
+    </resultMap>
+
+    <sql id="selectShoppingCartVo">
+        select id, user_id, goods_id, num from shopping_cart
+    </sql>
+
+    <select id="selectShoppingCartList" parameterType="ShoppingCart" resultMap="ShoppingCartResult">
+        <include refid="selectShoppingCartVo"/>
+        <where>  
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="goodsId != null  and goodsId != ''"> and goods_id = #{goodsId}</if>
+            <if test="num != null "> and num = #{num}</if>
+        </where>
+    </select>
+    
+    <select id="selectShoppingCartById" parameterType="Long" resultMap="ShoppingCartResult">
+        <include refid="selectShoppingCartVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertShoppingCart" parameterType="ShoppingCart" useGeneratedKeys="true" keyProperty="id">
+        insert into shopping_cart
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="num != null">num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="num != null">#{num},</if>
+         </trim>
+    </insert>
+
+    <update id="updateShoppingCart" parameterType="ShoppingCart">
+        update shopping_cart
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="num != null">num = #{num},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteShoppingCartById" parameterType="Long">
+        delete from shopping_cart where id = #{id}
+    </delete>
+
+    <delete id="deleteShoppingCartByIds" parameterType="String">
+        delete from shopping_cart where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

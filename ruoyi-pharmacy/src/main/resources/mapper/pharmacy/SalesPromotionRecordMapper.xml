@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.SalesPromotionRecordMapper">
+    
+    <resultMap type="SalesPromotionRecord" id="SalesPromotionRecordResult">
+        <result property="id"    column="id"    />
+        <result property="spCode"    column="sp_code"    />
+        <result property="content"    column="content"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSalesPromotionRecordVo">
+        select id, sp_code, content, update_by, update_time from sales_promotion_record
+    </sql>
+
+    <select id="selectSalesPromotionRecordList" parameterType="SalesPromotionRecord" resultMap="SalesPromotionRecordResult">
+        <include refid="selectSalesPromotionRecordVo"/>
+        <where>  
+            <if test="spCode != null "> and sp_code = #{spCode}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+        </where>
+    </select>
+    
+    <select id="selectSalesPromotionRecordById" parameterType="Long" resultMap="SalesPromotionRecordResult">
+        <include refid="selectSalesPromotionRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSalesPromotionRecord" parameterType="SalesPromotionRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into sales_promotion_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="spCode != null">sp_code,</if>
+            <if test="content != null">content,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="spCode != null">#{spCode},</if>
+            <if test="content != null">#{content},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesPromotionRecord" parameterType="SalesPromotionRecord">
+        update sales_promotion_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="spCode != null">sp_code = #{spCode},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSalesPromotionRecordById" parameterType="Long">
+        delete from sales_promotion_record where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesPromotionRecordByIds" parameterType="String">
+        delete from sales_promotion_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

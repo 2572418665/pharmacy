@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.SalesRecordMapper">
+    
+    <resultMap type="SalesRecord" id="SalesRecordResult">
+        <result property="id"    column="id"    />
+        <result property="orderId"    column="order_id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="num"    column="num"    />
+        <result property="cost"    column="cost"    />
+        <result property="originalPrice"    column="original_price"    />
+        <result property="discount"    column="discount"    />
+        <result property="price"    column="price"    />
+    </resultMap>
+
+    <sql id="selectSalesRecordVo">
+        select id, order_id, goods_id, num, cost, original_price, discount, price from sales_record
+    </sql>
+
+    <select id="selectSalesRecordList" parameterType="SalesRecord" resultMap="SalesRecordResult">
+        <include refid="selectSalesRecordVo"/>
+        <where>  
+            <if test="orderId != null "> and order_id = #{orderId}</if>
+            <if test="goodsId != null  and goodsId != ''"> and goods_id = #{goodsId}</if>
+            <if test="num != null "> and num = #{num}</if>
+            <if test="cost != null "> and cost = #{cost}</if>
+            <if test="originalPrice != null "> and original_price = #{originalPrice}</if>
+            <if test="discount != null "> and discount = #{discount}</if>
+            <if test="price != null "> and price = #{price}</if>
+        </where>
+    </select>
+    
+    <select id="selectSalesRecordById" parameterType="Long" resultMap="SalesRecordResult">
+        <include refid="selectSalesRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSalesRecord" parameterType="SalesRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into sales_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="num != null">num,</if>
+            <if test="cost != null">cost,</if>
+            <if test="originalPrice != null">original_price,</if>
+            <if test="discount != null">discount,</if>
+            <if test="price != null">price,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="num != null">#{num},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="originalPrice != null">#{originalPrice},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="price != null">#{price},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesRecord" parameterType="SalesRecord">
+        update sales_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="price != null">price = #{price},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSalesRecordById" parameterType="Long">
+        delete from sales_record where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesRecordByIds" parameterType="String">
+        delete from sales_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

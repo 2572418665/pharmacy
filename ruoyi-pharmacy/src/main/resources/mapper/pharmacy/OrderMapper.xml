@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.OrderMapper">
+
+    <resultMap type="Order" id="OrderResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="paymentAccount"    column="payment_account"    />
+        <result property="paymentTime"    column="payment_time"    />
+        <result property="payable"    column="payable"    />
+        <result property="amount"    column="amount"    />
+        <result property="receivingMethod"    column="receiving_method"    />
+        <result property="receivingAddress"    column="receiving_address"    />
+        <result property="tel"    column="tel"    />
+        <result property="code"    column="code"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectOrderVo">
+        select id, user_id, payment_account, payment_time, payable, amount, receiving_method, receiving_address, tel, code, state from `order`
+    </sql>
+
+    <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        <where>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="paymentAccount != null  and paymentAccount != ''"> and payment_account = #{paymentAccount}</if>
+            <if test="paymentTime != null "> and payment_time = #{paymentTime}</if>
+            <if test="payable != null "> and payable = #{payable}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="receivingMethod != null  and receivingMethod != ''"> and receiving_method = #{receivingMethod}</if>
+            <if test="receivingAddress != null  and receivingAddress != ''"> and receiving_address = #{receivingAddress}</if>
+            <if test="tel != null  and tel != ''"> and tel = #{tel}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+
+    <select id="selectOrderById" parameterType="Long" resultMap="OrderResult">
+        <include refid="selectOrderVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id">
+        insert into `order`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="paymentAccount != null">payment_account,</if>
+            <if test="paymentTime != null">payment_time,</if>
+            <if test="payable != null">payable,</if>
+            <if test="amount != null">amount,</if>
+            <if test="receivingMethod != null">receiving_method,</if>
+            <if test="receivingAddress != null">receiving_address,</if>
+            <if test="tel != null">tel,</if>
+            <if test="code != null">code,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="paymentAccount != null">#{paymentAccount},</if>
+            <if test="paymentTime != null">#{paymentTime},</if>
+            <if test="payable != null">#{payable},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="receivingMethod != null">#{receivingMethod},</if>
+            <if test="receivingAddress != null">#{receivingAddress},</if>
+            <if test="tel != null">#{tel},</if>
+            <if test="code != null">#{code},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrder" parameterType="Order">
+        update `order`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="paymentAccount != null">payment_account = #{paymentAccount},</if>
+            <if test="paymentTime != null">payment_time = #{paymentTime},</if>
+            <if test="payable != null">payable = #{payable},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="receivingMethod != null">receiving_method = #{receivingMethod},</if>
+            <if test="receivingAddress != null">receiving_address = #{receivingAddress},</if>
+            <if test="tel != null">tel = #{tel},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrderById" parameterType="Long">
+        delete from `order` where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderByIds" parameterType="String">
+        delete from `order` where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

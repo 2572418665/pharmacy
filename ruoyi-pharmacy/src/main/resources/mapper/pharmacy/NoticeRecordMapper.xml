@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.NoticeRecordMapper">
+    
+    <resultMap type="NoticeRecord" id="NoticeRecordResult">
+        <result property="id"    column="id"    />
+        <result property="noticeId"    column="notice_id"    />
+        <result property="publishId"    column="publish_id"    />
+        <result property="publishTime"    column="publish_time"    />
+    </resultMap>
+
+    <sql id="selectNoticeRecordVo">
+        select id, notice_id, publish_id, publish_time from notice_record
+    </sql>
+
+    <select id="selectNoticeRecordList" parameterType="NoticeRecord" resultMap="NoticeRecordResult">
+        <include refid="selectNoticeRecordVo"/>
+        <where>  
+            <if test="noticeId != null "> and notice_id = #{noticeId}</if>
+            <if test="publishId != null  and publishId != ''"> and publish_id = #{publishId}</if>
+            <if test="publishTime != null "> and publish_time = #{publishTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectNoticeRecordById" parameterType="Long" resultMap="NoticeRecordResult">
+        <include refid="selectNoticeRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertNoticeRecord" parameterType="NoticeRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into notice_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null">notice_id,</if>
+            <if test="publishId != null">publish_id,</if>
+            <if test="publishTime != null">publish_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null">#{noticeId},</if>
+            <if test="publishId != null">#{publishId},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateNoticeRecord" parameterType="NoticeRecord">
+        update notice_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeId != null">notice_id = #{noticeId},</if>
+            <if test="publishId != null">publish_id = #{publishId},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteNoticeRecordById" parameterType="Long">
+        delete from notice_record where id = #{id}
+    </delete>
+
+    <delete id="deleteNoticeRecordByIds" parameterType="String">
+        delete from notice_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

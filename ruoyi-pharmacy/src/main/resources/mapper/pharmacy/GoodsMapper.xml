@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.GoodsMapper">
+    
+    <resultMap type="Goods" id="GoodsResult">
+        <result property="id"    column="id"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="name"    column="name"    />
+        <result property="num"    column="num"    />
+        <result property="price"    column="price"    />
+        <result property="cost"    column="cost"    />
+        <result property="imgPath"    column="img_path"    />
+        <result property="treatmentType"    column="treatment_type"    />
+        <result property="components"    column="components"    />
+        <result property="keeping"    column="keeping"    />
+        <result property="enterprise"    column="enterprise"    />
+        <result property="effect"    column="effect"    />
+        <result property="drugUsage"    column="drug_usage"    />
+        <result property="usage"    column="usage"    />
+        <result property="dosage"    column="dosage"    />
+        <result property="adrs"    column="ADRs"    />
+        <result property="batchNum"    column="batch_num"    />
+        <result property="drugForm"    column="drug_form"    />
+        <result property="drugSpec"    column="drug_spec"    />
+        <result property="packingSpec"    column="packing_spec"    />
+        <result property="manufactureTime"    column="manufacture_time"    />
+        <result property="saveTime"    column="save_time"    />
+        <result property="suggestedPrice"    column="suggested_price"    />
+        <result property="isOtc"    column="is_otc"    />
+    </resultMap>
+
+    <sql id="selectGoodsVo">
+        select id, goods_id, type_id, name, num, price, cost, img_path, treatment_type, components, keeping, enterprise, effect, drug_usage, usage, dosage, ADRs, batch_num, drug_form, drug_spec, packing_spec, manufacture_time, save_time, suggested_price, is_otc from goods
+    </sql>
+
+    <select id="selectGoodsList" parameterType="Goods" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        <where>  
+            <if test="goodsId != null  and goodsId != ''"> and goods_id = #{goodsId}</if>
+            <if test="typeId != null "> and type_id = #{typeId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="num != null "> and num = #{num}</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="cost != null "> and cost = #{cost}</if>
+            <if test="imgPath != null  and imgPath != ''"> and img_path = #{imgPath}</if>
+            <if test="treatmentType != null  and treatmentType != ''"> and treatment_type = #{treatmentType}</if>
+            <if test="components != null  and components != ''"> and components = #{components}</if>
+            <if test="keeping != null  and keeping != ''"> and keeping = #{keeping}</if>
+            <if test="enterprise != null  and enterprise != ''"> and enterprise = #{enterprise}</if>
+            <if test="effect != null  and effect != ''"> and effect = #{effect}</if>
+            <if test="drugUsage != null  and drugUsage != ''"> and drug_usage = #{drugUsage}</if>
+            <if test="usage != null  and usage != ''"> and usage = #{usage}</if>
+            <if test="dosage != null  and dosage != ''"> and dosage = #{dosage}</if>
+            <if test="adrs != null  and adrs != ''"> and ADRs = #{adrs}</if>
+            <if test="batchNum != null  and batchNum != ''"> and batch_num = #{batchNum}</if>
+            <if test="drugForm != null  and drugForm != ''"> and drug_form = #{drugForm}</if>
+            <if test="drugSpec != null  and drugSpec != ''"> and drug_spec = #{drugSpec}</if>
+            <if test="packingSpec != null  and packingSpec != ''"> and packing_spec = #{packingSpec}</if>
+            <if test="manufactureTime != null "> and manufacture_time = #{manufactureTime}</if>
+            <if test="saveTime != null  and saveTime != ''"> and save_time = #{saveTime}</if>
+            <if test="suggestedPrice != null "> and suggested_price = #{suggestedPrice}</if>
+            <if test="isOtc != null  and isOtc != ''"> and is_otc = #{isOtc}</if>
+        </where>
+    </select>
+    
+    <select id="selectGoodsById" parameterType="Long" resultMap="GoodsResult">
+        <include refid="selectGoodsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="id">
+        insert into goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">goods_id,</if>
+            <if test="typeId != null">type_id,</if>
+            <if test="name != null">name,</if>
+            <if test="num != null">num,</if>
+            <if test="price != null">price,</if>
+            <if test="cost != null">cost,</if>
+            <if test="imgPath != null">img_path,</if>
+            <if test="treatmentType != null">treatment_type,</if>
+            <if test="components != null">components,</if>
+            <if test="keeping != null">keeping,</if>
+            <if test="enterprise != null">enterprise,</if>
+            <if test="effect != null">effect,</if>
+            <if test="drugUsage != null">drug_usage,</if>
+            <if test="usage != null">usage,</if>
+            <if test="dosage != null">dosage,</if>
+            <if test="adrs != null">ADRs,</if>
+            <if test="batchNum != null">batch_num,</if>
+            <if test="drugForm != null">drug_form,</if>
+            <if test="drugSpec != null">drug_spec,</if>
+            <if test="packingSpec != null">packing_spec,</if>
+            <if test="manufactureTime != null">manufacture_time,</if>
+            <if test="saveTime != null">save_time,</if>
+            <if test="suggestedPrice != null">suggested_price,</if>
+            <if test="isOtc != null">is_otc,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="num != null">#{num},</if>
+            <if test="price != null">#{price},</if>
+            <if test="cost != null">#{cost},</if>
+            <if test="imgPath != null">#{imgPath},</if>
+            <if test="treatmentType != null">#{treatmentType},</if>
+            <if test="components != null">#{components},</if>
+            <if test="keeping != null">#{keeping},</if>
+            <if test="enterprise != null">#{enterprise},</if>
+            <if test="effect != null">#{effect},</if>
+            <if test="drugUsage != null">#{drugUsage},</if>
+            <if test="usage != null">#{usage},</if>
+            <if test="dosage != null">#{dosage},</if>
+            <if test="adrs != null">#{adrs},</if>
+            <if test="batchNum != null">#{batchNum},</if>
+            <if test="drugForm != null">#{drugForm},</if>
+            <if test="drugSpec != null">#{drugSpec},</if>
+            <if test="packingSpec != null">#{packingSpec},</if>
+            <if test="manufactureTime != null">#{manufactureTime},</if>
+            <if test="saveTime != null">#{saveTime},</if>
+            <if test="suggestedPrice != null">#{suggestedPrice},</if>
+            <if test="isOtc != null">#{isOtc},</if>
+         </trim>
+    </insert>
+
+    <update id="updateGoods" parameterType="Goods">
+        update goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="typeId != null">type_id = #{typeId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="cost != null">cost = #{cost},</if>
+            <if test="imgPath != null">img_path = #{imgPath},</if>
+            <if test="treatmentType != null">treatment_type = #{treatmentType},</if>
+            <if test="components != null">components = #{components},</if>
+            <if test="keeping != null">keeping = #{keeping},</if>
+            <if test="enterprise != null">enterprise = #{enterprise},</if>
+            <if test="effect != null">effect = #{effect},</if>
+            <if test="drugUsage != null">drug_usage = #{drugUsage},</if>
+            <if test="usage != null">usage = #{usage},</if>
+            <if test="dosage != null">dosage = #{dosage},</if>
+            <if test="adrs != null">ADRs = #{adrs},</if>
+            <if test="batchNum != null">batch_num = #{batchNum},</if>
+            <if test="drugForm != null">drug_form = #{drugForm},</if>
+            <if test="drugSpec != null">drug_spec = #{drugSpec},</if>
+            <if test="packingSpec != null">packing_spec = #{packingSpec},</if>
+            <if test="manufactureTime != null">manufacture_time = #{manufactureTime},</if>
+            <if test="saveTime != null">save_time = #{saveTime},</if>
+            <if test="suggestedPrice != null">suggested_price = #{suggestedPrice},</if>
+            <if test="isOtc != null">is_otc = #{isOtc},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteGoodsById" parameterType="Long">
+        delete from goods where id = #{id}
+    </delete>
+
+    <delete id="deleteGoodsByIds" parameterType="String">
+        delete from goods where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.SalesPromotionGoodsMapper">
+    
+    <resultMap type="SalesPromotionGoods" id="SalesPromotionGoodsResult">
+        <result property="id"    column="id"    />
+        <result property="spCode"    column="sp_code"    />
+        <result property="goodsId"    column="goods_id"    />
+        <result property="discount"    column="discount"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectSalesPromotionGoodsVo">
+        select id, sp_code, goods_id, discount, del_flag from sales_promotion_goods
+    </sql>
+
+    <select id="selectSalesPromotionGoodsList" parameterType="SalesPromotionGoods" resultMap="SalesPromotionGoodsResult">
+        <include refid="selectSalesPromotionGoodsVo"/>
+        <where>  
+            <if test="spCode != null "> and sp_code = #{spCode}</if>
+            <if test="goodsId != null  and goodsId != ''"> and goods_id = #{goodsId}</if>
+            <if test="discount != null "> and discount = #{discount}</if>
+        </where>
+    </select>
+    
+    <select id="selectSalesPromotionGoodsById" parameterType="Long" resultMap="SalesPromotionGoodsResult">
+        <include refid="selectSalesPromotionGoodsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSalesPromotionGoods" parameterType="SalesPromotionGoods" useGeneratedKeys="true" keyProperty="id">
+        insert into sales_promotion_goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="spCode != null">sp_code,</if>
+            <if test="goodsId != null">goods_id,</if>
+            <if test="discount != null">discount,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="spCode != null">#{spCode},</if>
+            <if test="goodsId != null">#{goodsId},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesPromotionGoods" parameterType="SalesPromotionGoods">
+        update sales_promotion_goods
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="spCode != null">sp_code = #{spCode},</if>
+            <if test="goodsId != null">goods_id = #{goodsId},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSalesPromotionGoodsById" parameterType="Long">
+        delete from sales_promotion_goods where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesPromotionGoodsByIds" parameterType="String">
+        delete from sales_promotion_goods where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

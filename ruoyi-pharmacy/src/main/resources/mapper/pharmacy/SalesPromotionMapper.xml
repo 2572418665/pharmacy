@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.pharmacy.mapper.SalesPromotionMapper">
+    
+    <resultMap type="SalesPromotion" id="SalesPromotionResult">
+        <result property="id"    column="id"    />
+        <result property="spCode"    column="sp_code"    />
+        <result property="spTitle"    column="sp_title"    />
+        <result property="discount"    column="discount"    />
+        <result property="effectiveTime"    column="effective_time"    />
+        <result property="invalidTime"    column="invalid_time"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+
+    <sql id="selectSalesPromotionVo">
+        select id, sp_code, sp_title, discount, effective_time, invalid_time, state from sales_promotion
+    </sql>
+
+    <select id="selectSalesPromotionList" parameterType="SalesPromotion" resultMap="SalesPromotionResult">
+        <include refid="selectSalesPromotionVo"/>
+        <where>  
+            <if test="spCode != null "> and sp_code = #{spCode}</if>
+            <if test="spTitle != null  and spTitle != ''"> and sp_title = #{spTitle}</if>
+            <if test="discount != null "> and discount = #{discount}</if>
+            <if test="effectiveTime != null "> and effective_time = #{effectiveTime}</if>
+            <if test="invalidTime != null "> and invalid_time = #{invalidTime}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectSalesPromotionById" parameterType="Long" resultMap="SalesPromotionResult">
+        <include refid="selectSalesPromotionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSalesPromotion" parameterType="SalesPromotion" useGeneratedKeys="true" keyProperty="id">
+        insert into sales_promotion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="spCode != null">sp_code,</if>
+            <if test="spTitle != null">sp_title,</if>
+            <if test="discount != null">discount,</if>
+            <if test="effectiveTime != null">effective_time,</if>
+            <if test="invalidTime != null">invalid_time,</if>
+            <if test="state != null">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="spCode != null">#{spCode},</if>
+            <if test="spTitle != null">#{spTitle},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="effectiveTime != null">#{effectiveTime},</if>
+            <if test="invalidTime != null">#{invalidTime},</if>
+            <if test="state != null">#{state},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesPromotion" parameterType="SalesPromotion">
+        update sales_promotion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="spCode != null">sp_code = #{spCode},</if>
+            <if test="spTitle != null">sp_title = #{spTitle},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="effectiveTime != null">effective_time = #{effectiveTime},</if>
+            <if test="invalidTime != null">invalid_time = #{invalidTime},</if>
+            <if test="state != null">state = #{state},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSalesPromotionById" parameterType="Long">
+        delete from sales_promotion where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesPromotionByIds" parameterType="String">
+        delete from sales_promotion where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
